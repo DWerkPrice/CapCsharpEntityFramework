@@ -15,6 +15,8 @@ namespace CapCSharpEFLibrary.Models
         public int CustomerId { get; set; }
         public virtual Customer Customer { get; set; } // does not add a column allows for an instance of customer in our order
 
+        public override string ToString() => $"{Id}/{Description}/{Amount}/{CustomerId}"; //overrides
+
         public Order() { }  // need a default contstuctor
     }
 }

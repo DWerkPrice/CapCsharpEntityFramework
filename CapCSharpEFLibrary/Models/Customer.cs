@@ -14,6 +14,8 @@ namespace CapCSharpEFLibrary.Models
         public string Name { get; set; }
         public double Sales { get; set; }  // doubles are not allowed to be nullable, numeric data generally does not need additional attributes
         public bool Active { get; set; }
+
+        public override string ToString() => $"{Id}/{Name}/{Sales}/{Active}"; //overrides
         
         public Customer() {}  // need a default contstuctor
     }
