@@ -17,6 +17,8 @@ namespace CapCSharpEFLibrary.Models
 
         public override string ToString() => $"{Id}/{Description}/{Amount}/{CustomerId}"; //overrides
 
+        public virtual List<OrderLine> OrderLines { get; set; }
+
         public Order() { }  // need a default contstuctor
     }
 }

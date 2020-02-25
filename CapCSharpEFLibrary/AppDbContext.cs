@@ -6,7 +6,7 @@ namespace CapCSharpEFLibrary
 {
     public class AppDbContext : DbContext {
         public AppDbContext() { }
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options){ }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public virtual DbSet<Customer> Customers { get; set; }// use plurals of class name, this has to be somewhere inside class this is the first of the lists of tables we can access
 
@@ -14,6 +14,7 @@ namespace CapCSharpEFLibrary
 
         public virtual DbSet<Product> Products { get; set; }
 
+        public virtual DbSet<OrderLine> OrderLines { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder builder) {
             if (!builder.IsConfigured) {
@@ -26,11 +27,20 @@ namespace CapCSharpEFLibrary
         // required in capstone to make columns unique  this is called Fluent API
         protected override void OnModelCreating(ModelBuilder model) {
             model.Entity<Product>(e => {
+                e.ToTable("Products");  //class name is singular and you should make table names plural
                 e.HasKey(x => x.Id);
                 e.Property(x => x.Code).HasMaxLength(10).IsRequired();
                 e.Property(x => x.Name).HasMaxLength(30).IsRequired();
                 e.Property(x => x.Price);
                 e.HasIndex(x => x.Code).IsUnique();
+            });
+
+            model.Entity<OrderLine>(e => {
+                    e.ToTable("OrderLines");
+                    e.HasKey(x => x.Id);
+                    e.HasOne(x => x.Product).WithMany(x => x.OrderLines)
+                    .HasForeignKey(x => x.ProductId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
         }
     }
